@@ -102,21 +102,21 @@ OUT_DIR = RESULTS_ROOT
 HF_REPO_ID = "balo7773/project_one_HF" 
 
 def load_hf_assets():
-    """Fetches ONLY the heavy model and scaler from Hugging Face."""
+    """
+    Fetches heavy assets from Hugging Face. 
+    Natively caches to disk to prevent redundant network calls.
+    """
     try:
         model = hf_hub_download(repo_id=HF_REPO_ID, filename="best_model.pt")
         scaler = hf_hub_download(repo_id=HF_REPO_ID, filename="scaler_params.json")
-        return model, scaler
+        data = hf_hub_download(repo_id=HF_REPO_ID, filename="master_dataset_clean.csv")
+        return model, scaler, data
     except Exception as e:
         print(f"Failed to load assets from Hugging Face: {e}")
         sys.exit(1)
 
-# Retrieve cloud assets
-MODEL_PATH, SCALER_PATH = load_hf_assets()
-
-# Point directly to the local dataset cloned by Streamlit
-DATA_CSV = os.path.join(BASE_DIR, 'master_dataset_clean.csv')
-
+# Retrieve the cached local paths
+MODEL_PATH, SCALER_PATH, DATA_CSV = load_hf_assets()
 def _setup_run_dir(tag: str) -> str:
     """
     Create a timestamped subfolder for this run and update the 'latest'
