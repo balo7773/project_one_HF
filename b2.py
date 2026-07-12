@@ -94,7 +94,8 @@ except ImportError:
 #
 # OUT_DIR is re-assigned in _setup_run_dir() before any file writes.
 # Module-level assignment here is just a safe default — never written to.
-BBASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RESULTS_ROOT = os.path.join(BASE_DIR, 'optimizer_results')
 os.makedirs(RESULTS_ROOT, exist_ok=True)
 OUT_DIR = RESULTS_ROOT
