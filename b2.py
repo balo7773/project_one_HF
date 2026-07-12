@@ -99,7 +99,7 @@ RESULTS_ROOT = os.path.join(BASE_DIR, 'optimizer_results')
 os.makedirs(RESULTS_ROOT, exist_ok=True)
 OUT_DIR = RESULTS_ROOT
 # Define your exact Hugging Face repository
-HF_REPO_ID = "balo7773/project_one" 
+HF_REPO_ID = "balo7773/project_one_HF" 
 
 def load_hf_assets():
     """Fetches ONLY the heavy model and scaler from Hugging Face."""
