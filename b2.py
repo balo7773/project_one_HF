@@ -94,28 +94,28 @@ except ImportError:
 #
 # OUT_DIR is re-assigned in _setup_run_dir() before any file writes.
 # Module-level assignment here is just a safe default — never written to.
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BBASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RESULTS_ROOT = os.path.join(BASE_DIR, 'optimizer_results')
 os.makedirs(RESULTS_ROOT, exist_ok=True)
-OUT_DIR = RESULTS_ROOT 
-
+OUT_DIR = RESULTS_ROOT
 # Define your exact Hugging Face repository
-HF_REPO_ID = "balo7773/project_one_HF" 
+HF_REPO_ID = "balo7773/project_one" 
 
-@st.cache_resource(show_spinner="Initializing aerodynamic models and data...")
 def load_hf_assets():
-    """Fetches and caches all heavy assets from the Hugging Face Hub."""
+    """Fetches ONLY the heavy model and scaler from Hugging Face."""
     try:
         model = hf_hub_download(repo_id=HF_REPO_ID, filename="best_model.pt")
         scaler = hf_hub_download(repo_id=HF_REPO_ID, filename="scaler_params.json")
-        data = hf_hub_download(repo_id=HF_REPO_ID, filename="master_dataset_clean.csv")
-        return model, scaler, data
+        return model, scaler
     except Exception as e:
-        st.error(f"Failed to load assets from Hugging Face: {e}")
+        print(f"Failed to load assets from Hugging Face: {e}")
         sys.exit(1)
 
-# Streamlit will run this once and cache the resulting local file paths
-MODEL_PATH, SCALER_PATH, DATA_CSV = load_hf_assets()
+# Retrieve cloud assets
+MODEL_PATH, SCALER_PATH = load_hf_assets()
+
+# Point directly to the local dataset cloned by Streamlit
+DATA_CSV = os.path.join(BASE_DIR, 'master_dataset_clean.csv')
 
 def _setup_run_dir(tag: str) -> str:
     """
